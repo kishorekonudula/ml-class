@@ -10,6 +10,8 @@ config = run.config
 img_width = X_train.shape[1]
 img_height = X_train.shape[2]
 
+X_train, X_test = X_train / 255, X_test / 255 # Normalizing the inputs
+
 # one hot encode outputs
 y_train = tf.keras.utils.to_categorical(y_train)
 y_test = tf.keras.utils.to_categorical(y_test)
@@ -18,8 +20,10 @@ labels = [str(i) for i in range(10)]
 num_classes = y_train.shape[1]
 
 # create model
-model = tf.keras.models.Sequential()
-model.add(tf.keras.layers.Flatten(input_shape=(img_width, img_height)))
+model = tf.keras.models.Sequential() # This is the first layer. Output of every layers will go into the input of the next layer
+model.add(tf.keras.layers.Flatten(input_shape=(img_width, img_height))) # Convert the 2*2 vector to a flat vector
+model.add(tf.keras.layers.Dense(50, activation='relu'))
+model.add(tf.keras.layers.Dense(100, activation='selu'))
 model.add(tf.keras.layers.Dense(num_classes, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer='adam',
               metrics=['accuracy'])
