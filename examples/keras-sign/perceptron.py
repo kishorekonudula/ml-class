@@ -16,7 +16,7 @@ config.epochs = 10
 
 # load data
 (X_test, y_test) = signdata.load_test_data()
-(X_train, y_train) = signdata.load_train_data()
+(X_train, y_train) = signdata.load_train_data() # y data is the corresponding alphabet number. There are only 25 because 2 alphabets are removed as they involve hand movement in the sign language
 
 img_width = X_test.shape[1]
 img_height = X_test.shape[2]
@@ -36,3 +36,7 @@ model.compile(loss=config.loss, optimizer=config.optimizer,
 # Fit the model
 model.fit(X_train, y_train, epochs=10, validation_data=(X_test, y_test),
           callbacks=[WandbCallback(data_type="image", labels=signdata.letters)])
+
+# The default model in this case is performing very badly. The accuracy is pretty bad.
+# Normalizing the data improves the accuracy. One way to do it for this data is to divide the data by 255 Since the input is between 0 and 255
+# 

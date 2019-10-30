@@ -57,7 +57,7 @@ testX = testX[:, :, np.newaxis]
 
 # create and fit the RNN
 model = tf.keras.models.Sequential()
-model.add(tf.keras.layers.SimpleRNN(5, input_shape=(config.look_back, 1)))
+model.add(tf.keras.layers.SimpleRNN(5, input_shape=(config.look_back, 1))) # 5 here is the size of the input
 model.add(tf.keras.layers.Dense(1, activation="sigmoid"))
 model.compile(loss='mae', optimizer='rmsprop')
 model.fit(trainX, trainY, epochs=config.epochs, batch_size=config.batch_size, validation_data=(testX, testY),  callbacks=[

@@ -10,13 +10,13 @@ import util
 # set parameters:
 wandb.init()
 config = wandb.config
-config.vocab_size = 1000
-config.maxlen = 300
+config.vocab_size = 1000 # Increasing this will improve accuracy (10000) Most commons words in the corpus
+config.maxlen = 300 # Restricting the input to 300 words per document
 config.batch_size = 32
-config.embedding_dims = 50
+config.embedding_dims = 50 # This is something we should know about the word embedding
 config.filters = 250
 config.kernel_size = 3
-config.hidden_dims = 100
+config.hidden_dims = 100 # Size of the vector thats passing between LSTM layers. Higher the number, more complicated the LSTM. This can overfit
 config.epochs = 10
 
 # Load and tokenize input
@@ -48,7 +48,7 @@ model = tf.keras.models.Sequential()
 model.add(tf.keras.layers.Embedding(config.vocab_size,
                                     config.embedding_dims,
                                     input_length=config.maxlen))
-model.add(tf.keras.layers.Bidirectional(LSTM(config.hidden_dims)))
+model.add(tf.keras.layers.Bidirectional(LSTM(config.hidden_dims))) # Run the LSTM in both directions
 model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
 model.compile(loss='binary_crossentropy',
               optimizer='rmsprop',

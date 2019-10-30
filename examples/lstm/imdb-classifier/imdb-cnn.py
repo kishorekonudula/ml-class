@@ -10,12 +10,12 @@ from util import TextLogger
 # set parameters:
 wandb.init()
 config = wandb.config
-config.vocab_size = 1000
+config.vocab_size = 5000
 config.maxlen = 1000
-config.batch_size = 64
+config.batch_size = 32
 config.embedding_dims = 50
-config.filters = 50
-config.kernel_size = 3
+config.filters = 75 # In 1D conv 50 filters
+config.kernel_size = 3 # (3,3 kernel is used in 2DConv)
 config.hidden_dims = 100
 config.epochs = 10
 
@@ -42,6 +42,7 @@ model.add(tf.keras.layers.Conv1D(config.filters,
                                  config.kernel_size,
                                  padding='valid',
                                  activation='relu'))
+model.add(tf.keras.layers.Dropout(0.5))
 model.add(tf.keras.layers.Flatten())
 model.add(tf.keras.layers.Dense(config.hidden_dims, activation='relu'))
 model.add(tf.keras.layers.Dropout(0.5))

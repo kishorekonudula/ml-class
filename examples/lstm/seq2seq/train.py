@@ -1,4 +1,5 @@
 # adapted from https://blog.keras.io/a-ten-minute-introduction-to-sequence-to-sequence-learning-in-keras.html
+# Increasing hidden size (240 or 128) and changing optimizer to nadam should improve the accuracy
 import tensorflow as tf
 import numpy as np
 import wandb
@@ -51,7 +52,7 @@ config.batch_size = 64
 maxlen = config.digits + 1 + config.digits + 1 + config.digits
 
 # All the numbers, plus sign and space for padding.
-chars = '0123456789+- '
+chars = '0123456789%- '
 ctable = CharacterTable(chars)
 
 questions = []
@@ -59,7 +60,7 @@ expected = []
 seen = set()
 print('Generating data...')
 while len(questions) < config.training_size:
-    def f(): return int(''.join(np.random.choice(list('0123456789'))
+    def f(): return int(''.join(np.random.choice(list('123456789'))
                                 for i in range(np.random.randint(1, config.digits + 1))))
     a, b = f(), f()
     # Skip any addition questions we've already seen
@@ -70,9 +71,9 @@ while len(questions) < config.training_size:
     seen.add(key)
     
     # Pad the data with spaces such that it is always MAXLEN.
-    q = '{}+{}'.format(a, b)
+    q = '{}%{}'.format(a, b)
     query = q + ' ' * (maxlen - len(q))
-    ans = str(a + b)
+    ans = str(a % b)
 
     # Pad answer - Answers can be of maximum size DIGITS + 1.
     ans += ' ' * (config.digits + 1 - len(ans))
